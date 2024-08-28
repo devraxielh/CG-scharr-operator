@@ -1,0 +1,9 @@
+{
+    "imageSrc": "./assets/operador-laplaciano.png",
+    "imageAlt": "Imagen del Operador Laplaciano",
+    "title": "¿Qué es el Operador Laplaciano?",
+    "description": [
+        "El Operador Laplaciano es una técnica de procesamiento de imágenes utilizada para la detección de bordes. Este operador calcula la segunda derivada de la intensidad de una imagen, lo que permite detectar áreas de cambio rápido en la intensidad, como bordes y detalles finos.",
+        "El Operador Laplaciano se utiliza ampliamente en aplicaciones de procesamiento de imágenes y visión por computadora, como la segmentación de imágenes, el análisis de texturas y el reconocimiento de objetos. Su capacidad para resaltar áreas de cambio de intensidad hace que sea una herramienta valiosa en estos campos."
+    ]
+}

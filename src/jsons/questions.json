@@ -1,0 +1,52 @@
+[
+    {
+        "question": "¿Cuál es el propósito principal del Operador Laplaciano en el procesamiento de imágenes?",
+        "options": [
+            "Reducción de ruido",
+            "Detección de bordes",
+            "Compresión de imágenes",
+            "Mejora del contraste"
+        ],
+        "correctAnswer": 1
+    },
+    {
+        "question": "¿Qué tamaño suele tener el filtro utilizado en la implementación del Operador Laplaciano?",
+        "options": [
+            "Filtro de 3x3",
+            "Filtro de 5x5",
+            "Filtro de 7x7",
+            "Filtro de 9x9"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "¿Qué calcula el Operador Laplaciano en cada punto de la imagen?",
+        "options": [
+            "El valor promedio de los píxeles",
+            "La desviación estándar de los píxeles",
+            "La segunda derivada de la intensidad",
+            "La transformada de Fourier"
+        ],
+        "correctAnswer": 2
+    },
+    {
+        "question": "¿Cuántas etapas principales tiene el algoritmo del Operador Laplaciano?",
+        "options": [
+            "1",
+            "2",
+            "3",
+            "4"
+        ],
+        "correctAnswer": 0
+    },
+    {
+        "question": "¿Cuál de las siguientes NO es una aplicación común del Operador Laplaciano?",
+        "options": [
+            "Detección de bordes",
+            "Segmentación de imágenes médicas",
+            "Realce de detalles en imágenes",
+            "Compresión de imágenes sin pérdida"
+        ],
+        "correctAnswer": 3
+    }
+]
