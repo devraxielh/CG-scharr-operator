@@ -22,27 +22,27 @@ const Theory = () => {
     };
     return (
         <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h3 className="text-xl font-bold mb-4">Teoría del Operador Laplaciano</h3>
+            <h3 className="text-xl font-bold mb-4">Teoría del Operador Scharr</h3>
             <div className="border border-gray-200 rounded-lg">
-                <AccordionItem title="¿Qué es el Operador Laplaciano?">
-                    <p>El Operador Laplaciano es una técnica de procesamiento de imágenes utilizada para la detección de bordes. Este operador calcula la segunda derivada de la intensidad de la imagen, lo que permite detectar áreas de cambio rápido en la intensidad, como bordes y detalles finos.</p>
+                <AccordionItem title="¿Qué es el Operador Scharr?">
+                    <p>El Operador Scharr es una técnica de procesamiento de imágenes utilizada para la detección de bordes. Este operador es una mejora del Operador Sobel, proporcionando una mayor precisión en la estimación de gradientes, lo que permite detectar bordes más finos y detalles más nítidos en las imágenes.</p>
                 </AccordionItem>
 
                 <AccordionItem title="Fundamentos Matemáticos">
-                    <p>El proceso del Operador Laplaciano incluye los siguientes pasos fundamentales:</p>
+                    <p>El proceso del Operador Scharr incluye los siguientes pasos fundamentales:</p>
                     <ol className="list-decimal list-inside">
-                        <li>Aplicación de un filtro para reducir el ruido (opcional).</li>
-                        <li>Cálculo de la segunda derivada de la imagen utilizando el Operador Laplaciano.</li>
-                        <li>Identificación de bordes basados en cambios en la segunda derivada.</li>
-                        <li>Posible post-procesamiento para eliminar bordes falsos o no deseados.</li>
+                        <li>Aplicación de un filtro para reducir el ruido (opcional, pero recomendado).</li>
+                        <li>Cálculo del gradiente de la imagen utilizando los kernels Scharr en las direcciones X e Y.</li>
+                        <li>Combinación de los gradientes para obtener la magnitud y la dirección del borde.</li>
+                        <li>Posible post-procesamiento para resaltar bordes importantes o suavizar bordes no deseados.</li>
                     </ol>
                 </AccordionItem>
 
                 <AccordionItem title="Proceso de Aplicación">
                     <ol className="list-decimal list-inside">
                         <li>Suavizado de la imagen (si es necesario) para reducir el ruido.</li>
-                        <li>Aplicación del Operador Laplaciano para calcular la segunda derivada.</li>
-                        <li>Identificación de bordes a través de la detección de cambios significativos en la intensidad.</li>
+                        <li>Aplicación del Operador Scharr en las direcciones X e Y para calcular los gradientes.</li>
+                        <li>Combinación de los gradientes para determinar la magnitud del borde en cada punto.</li>
                         <li>Post-procesamiento para mejorar la detección de bordes si es necesario.</li>
                     </ol>
                 </AccordionItem>
@@ -50,32 +50,32 @@ const Theory = () => {
                 <AccordionItem title="Ventajas y Desventajas">
                     <h4 className="font-semibold">Ventajas:</h4>
                     <ul className="list-disc list-inside mb-2">
-                        <li>Detecta bordes con alta sensibilidad a cambios de intensidad.</li>
-                        <li>Puede detectar detalles finos y bordes en diversas direcciones.</li>
-                        <li>Sencillo de implementar en comparación con métodos más complejos.</li>
+                        <li>Ofrece una mayor precisión en la detección de bordes en comparación con Sobel.</li>
+                        <li>Capaz de detectar detalles finos y bordes en diversas direcciones con alta precisión.</li>
+                        <li>Adecuado para aplicaciones que requieren alta sensibilidad a los cambios de intensidad.</li>
                     </ul>
                     <h4 className="font-semibold">Desventajas:</h4>
                     <ul className="list-disc list-inside">
-                        <li>Más sensible al ruido debido al cálculo de la segunda derivada.</li>
-                        <li>Puede producir bordes falsos si la imagen no ha sido suavizada adecuadamente.</li>
+                        <li>Más complejo y computacionalmente costoso que el Operador Sobel.</li>
+                        <li>Puede ser más sensible al ruido, requiriendo un filtrado previo.</li>
                     </ul>
                 </AccordionItem>
 
                 <AccordionItem title="Aplicaciones Prácticas">
-                    <p>El Operador Laplaciano se utiliza en diversas aplicaciones de procesamiento de imágenes y visión por computadora, incluyendo:</p>
+                    <p>El Operador Scharr se utiliza en diversas aplicaciones de procesamiento de imágenes y visión por computadora, incluyendo:</p>
                     <ul className="list-disc list-inside">
-                        <li>Segmentación de imágenes para identificar estructuras y bordes</li>
-                        <li>Realce de detalles en imágenes científicas y médicas</li>
-                        <li>Procesamiento de imágenes satelitales</li>
-                        <li>Detección de características en imágenes de alta resolución</li>
-                        <li>Análisis de texturas en imágenes digitales</li>
+                        <li>Detección de bordes en imágenes de alta resolución.</li>
+                        <li>Segmentación de imágenes en análisis médicos y científicos.</li>
+                        <li>Procesamiento de imágenes en tiempo real en sistemas de vigilancia.</li>
+                        <li>Realce de detalles en imágenes satelitales y de teledetección.</li>
+                        <li>Análisis de texturas en imágenes digitales complejas.</li>
                     </ul>
                 </AccordionItem>
 
                 <AccordionItem title="Comparación con Otros Operadores">
-                    <p>El Operador Laplaciano es uno de varios métodos de detección de bordes. Otros operadores comunes incluyen:</p>
+                    <p>El Operador Scharr es uno de varios métodos de detección de bordes. Otros operadores comunes incluyen:</p>
                     <ul className="list-disc list-inside">
-                        <li>Operador Sobel: Calcula el gradiente de la imagen para detectar bordes.</li>
+                        <li>Operador Sobel: Similar a Scharr, pero con menos precisión en la detección de bordes.</li>
                         <li>Operador Prewitt: Similar al Sobel pero con diferente configuración de los kernels.</li>
                         <li>Operador Roberts: Utiliza kernels más pequeños y es más sensible al ruido.</li>
                         <li>Operador Canny: Método avanzado que maximiza la relación señal-ruido y reduce los bordes falsos.</li>

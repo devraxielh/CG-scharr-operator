@@ -1,194 +1,338 @@
 import React, { useState, useEffect } from 'react';
 
-const CannyEdgeAnimatedExplanation = () => {
-    const [frame, setFrame] = useState(0);
-    const gridSize = 5;
-    const [grid, setGrid] = useState(Array(gridSize).fill().map(() => Array(gridSize).fill(0)));
-    const [initialGrid, setInitialGrid] = useState(Array(gridSize).fill().map(() => Array(gridSize).fill(0)));
-    const [isRunning, setIsRunning] = useState(false);
-    const [showExplanation, setShowExplanation] = useState(false);
-    useEffect(() => {
-        let interval;
-        if (isRunning) {
-            interval = setInterval(() => {
-            setFrame((prevFrame) => (prevFrame + 1) % 5);
-            }, 1000);
-        }
-        return () => clearInterval(interval);
-    }, [isRunning]);
+const SchorrOperatorInteractiveFullControls = () => {
+  const [inputGrid, setInputGrid] = useState([
+    [50, 50, 50, 200, 200],
+    [50, 50, 50, 200, 200],
+    [50, 50, 50, 200, 200],
+    [50, 50, 50, 200, 200],
+    [50, 50, 50, 200, 200]
+  ]);
+  const [outputGrid, setOutputGrid] = useState([]);
+  const [selectedCell, setSelectedCell] = useState({ row: 2, col: 2 });
+  const [gx, setGx] = useState(0);
+  const [gy, setGy] = useState(0);
+  const [g, setG] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [animationStep, setAnimationStep] = useState(0);
 
-    useEffect(() => {
-        if (frame === 0) {
-            setGrid(initialGrid.map(row => [...row]));
-        } else {
-            const newGrid = grid.map(row => [...row]);
-            const laplacian = [
-            [0, 1, 0],
-            [1, -4, 1],
-            [0, 1, 0]
-            ];
-            for (let i = 1; i < gridSize - 1; i++) {
-            for (let j = 1; j < gridSize - 1; j++) {
-                let sum = 0;
-                for (let di = -1; di <= 1; di++) {
-                for (let dj = -1; dj <= 1; dj++) {
-                    sum += newGrid[i + di][j + dj] * laplacian[di + 1][dj + 1];
-                }
-                }
-                newGrid[i][j] = Math.max(-1, Math.min(1, sum));
-            }
-            }
-            setGrid(newGrid);
-        }
-    }, [frame, initialGrid]);
+  const cellSize = 50;
 
-    const handleCellClick = (i, j) => {
-      if (!isRunning) {
-        const newInitialGrid = initialGrid.map(row => [...row]);
-        newInitialGrid[i][j] = newInitialGrid[i][j] === 1 ? 0 : 1;
-        setInitialGrid(newInitialGrid);
-        setGrid(newInitialGrid);
+  const schorrX = [
+    [-3, 0, 3],
+    [-10, 0, 10],
+    [-3, 0, 3]
+  ];
+
+  const schorrY = [
+    [-3, -10, -3],
+    [0, 0, 0],
+    [3, 10, 3]
+  ];
+
+  useEffect(() => {
+    calculateGradients();
+    calculateOutputImage();
+  }, [inputGrid, selectedCell]);
+
+  useEffect(() => {
+    let interval;
+    if (isAnimating) {
+      interval = setInterval(() => {
+        setAnimationStep((prevStep) => (prevStep + 1) % 7);
+      }, 2000);
+    }
+    return () => clearInterval(interval);
+  }, [isAnimating]);
+
+  const calculateGradients = () => {
+    const { row, col } = selectedCell;
+    let sumX = 0;
+    let sumY = 0;
+
+    for (let i = -1; i <= 1; i++) {
+      for (let j = -1; j <= 1; j++) {
+        const gridValue = inputGrid[row + i]?.[col + j] || 0;
+        sumX += gridValue * schorrX[i + 1][j + 1];
+        sumY += gridValue * schorrY[i + 1][j + 1];
       }
-    };
-  
-    const toggleRunning = () => {
-      setIsRunning(!isRunning);
-      setFrame(0);
-    };
-  
-    const resetGrid = () => {
-      setIsRunning(false);
-      setFrame(0);
-      setInitialGrid(Array(gridSize).fill().map(() => Array(gridSize).fill(0)));
-      setGrid(Array(gridSize).fill().map(() => Array(gridSize).fill(0)));
-    };
-  
-    const explanation = [
-      "Configuración inicial: Haz clic en las celdas para activarlas o desactivarlas.",
-      "Primera aplicación: El operador Laplaciano detecta cambios bruscos alrededor de los puntos activos.",
-      "Segunda aplicación: El efecto se propaga, resaltando más los bordes.",
-      "Tercera aplicación: Se observa una mayor propagación del efecto.",
-      "Resultado final: Se aprecia claramente el patrón de detección de bordes del operador Laplaciano."
-    ];
-  
-    const ConvolutionMatrix = () => (
-      <div className="flex flex-col items-center mb-6">
-        <h4 className="text-lg font-semibold mb-3">Matriz de Convolución del Operador Laplaciano</h4>
-        <div className="relative">
-          <div className="grid grid-cols-3 gap-1 p-4 bg-gray-100 rounded-xl shadow-lg">
-            {[0, 1, 0, 1, -4, 1, 0, 1, 0].map((value, index) => (
-              <div 
-                key={index} 
-                className={`w-14 h-14 flex items-center justify-center text-xl font-bold rounded-lg ${
-                  value === 0 ? 'bg-gray-200 text-gray-500' : 
-                  value === 1 ? 'bg-blue-200 text-blue-700' : 
-                  'bg-red-200 text-red-700'
-                }`}
-              >
-                {value}
-              </div>
-            ))}
-          </div>
-          <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-yellow-300 text-yellow-800 px-2 py-0.5 rounded-full text-xs font-semibold">
-            Píxeles superiores
-          </div>
-          <div className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 bg-yellow-300 text-yellow-800 px-2 py-0.5 rounded-full text-xs font-semibold">
-            Píxeles inferiores
-          </div>
-          <div className="absolute -left-3 top-1/2 transform -translate-y-1/2 bg-yellow-300 text-yellow-800 px-2 py-0.5 rounded-full text-xs font-semibold whitespace-nowrap" style={{writingMode: 'vertical-rl', textOrientation: 'mixed'}}>
-            Píxeles izquierdos
-          </div>
-          <div className="absolute -right-3 top-1/2 transform -translate-y-1/2 bg-yellow-300 text-yellow-800 px-2 py-0.5 rounded-full text-xs font-semibold whitespace-nowrap" style={{writingMode: 'vertical-rl', textOrientation: 'mixed'}}>
-            Píxeles derechos
-          </div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-green-300 text-green-800 px-2 py-0.5 rounded-full text-xs font-semibold">
-            Píxel central
-          </div>
-        </div>
-      </div>
+    }
+
+    setGx(sumX);
+    setGy(sumY);
+    setG(Math.sqrt(sumX * sumX + sumY * sumY));
+  };
+
+  const calculateOutputImage = () => {
+    const output = inputGrid.map((row, i) =>
+      row.map((_, j) => {
+        let sumX = 0;
+        let sumY = 0;
+        for (let di = -1; di <= 1; di++) {
+          for (let dj = -1; dj <= 1; dj++) {
+            const value = inputGrid[i + di]?.[j + dj] || 0;
+            sumX += value * schorrX[di + 1][dj + 1];
+            sumY += value * schorrY[di + 1][dj + 1];
+          }
+        }
+        return Math.sqrt(sumX * sumX + sumY * sumY);
+      })
     );
-  
-    const DetailedExplanation = () => (
-      <div className="mt-6 p-4 bg-gray-50 rounded-lg shadow-md">
-        <h3 className="text-lg font-semibold mb-3">Cómo el Operador Laplaciano detecta bordes:</h3>
-        <ConvolutionMatrix />
-        <p className="mb-3 text-sm">El Operador Laplaciano detecta bordes al medir los cambios bruscos de intensidad en una imagen. Funciona así:</p>
-        <ol className="list-decimal list-inside mb-4 space-y-1 text-sm">
-          <li>La matriz de convolución se aplica a cada píxel y sus 8 vecinos inmediatos.</li>
-          <li>Se calcula la suma de los valores de los píxeles vecinos multiplicados por los valores correspondientes de la matriz.</li>
-          <li>Un resultado cercano a cero indica un área uniforme (sin borde).</li>
-          <li>Un resultado muy positivo o muy negativo indica un cambio brusco (borde).</li>
-        </ol>
-        <p className="text-sm font-semibold mb-2">En nuestra animación:</p>
-        <ul className="list-disc list-inside space-y-1 text-sm">
-          <li><span className="text-blue-600 font-semibold">Azul oscuro:</span> Valores positivos (cambio de oscuro a claro)</li>
-          <li><span className="text-red-600 font-semibold">Rojo oscuro:</span> Valores negativos (cambio de claro a oscuro)</li>
-          <li><span className="text-green-600 font-semibold">Verde:</span> Valores cercanos a cero (sin cambio significativo)</li>
-        </ul>
-      </div>
+
+    const flatOutput = output.flat();
+    const maxValue = Math.max(...flatOutput);
+    const normalizedOutput = output.map(row =>
+      row.map(value => Math.round((value / maxValue) * 255))
     );
-  
-    return (
-      <div className="p-4 max-w-3xl mx-auto">
-        <div className="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 mb-4 rounded">
-          <p className="font-bold">Instrucciones:</p>
-          <ol className="list-decimal list-inside text-sm mt-1">
-            <li>Haz clic en las celdas de la cuadrícula para seleccionar puntos iniciales.</li>
-            <li>Cuando estés listo, presiona "Iniciar Animación" para ver el efecto del Operador Laplaciano.</li>
-            <li>Puedes detener la animación en cualquier momento y reiniciar la cuadrícula para probar diferentes configuraciones.</li>
-          </ol>
-        </div>
-        
-        <div className="grid grid-cols-5 gap-1 mb-4">
-          {grid.map((row, i) =>
-            row.map((cell, j) => (
-              <div
-                key={`${i}-${j}`}
-                className="w-12 h-12 flex items-center justify-center cursor-pointer text-xs"
+
+    setOutputGrid(normalizedOutput);
+  };
+
+  const handleCellClick = (row, col) => {
+    setSelectedCell({ row, col });
+  };
+
+  const handleCellValueChange = (row, col, value) => {
+    const newGrid = inputGrid.map((r, i) =>
+      r.map((c, j) => (i === row && j === col ? value : c))
+    );
+    setInputGrid(newGrid);
+  };
+
+  const renderGrid = (grid, isOutput = false, highlight = []) => {
+    return grid.map((row, i) => (
+      <div key={i} style={{ display: 'flex' }}>
+        {row.map((cell, j) => (
+          <div
+            key={j}
+            style={{
+              width: cellSize,
+              height: cellSize,
+              backgroundColor: highlight.some(([hi, hj]) => hi === i && hj === j) ? 'yellow' : `rgb(${cell}, ${cell}, ${cell})`,
+              border: '1px solid #ccc',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              color: cell > 128 ? 'black' : 'white',
+              outline: !isOutput && i === selectedCell.row && j === selectedCell.col ? '2px solid red' : 'none',
+              cursor: isOutput ? 'default' : 'pointer',
+            }}
+            onClick={() => !isOutput && handleCellClick(i, j)}
+          >
+            {!isOutput && (
+              <input
+                type="number"
+                value={cell}
+                onChange={(e) => handleCellValueChange(i, j, parseInt(e.target.value) || 0)}
                 style={{
-                  backgroundColor: `rgb(${255 * (1 - cell)}, ${255 * (1 - Math.abs(cell))}, ${255 * (1 + cell)})`
+                  width: '100%',
+                  height: '100%',
+                  border: 'none',
+                  background: 'none',
+                  textAlign: 'center',
+                  color: 'inherit',
+                  fontSize: '14px',
                 }}
-                onClick={() => handleCellClick(i, j)}
-              >
-                {cell.toFixed(2)}
-              </div>
-            ))
-          )}
-        </div>
-        <p className="mb-3 text-sm">Frame: {frame}</p>
-        <div className="flex space-x-2 mb-4">
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg text-sm transition duration-300"
-            onClick={toggleRunning}
-          >
-            {isRunning ? 'Detener' : 'Iniciar'} Animación
-          </button>
-          <button
-            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg text-sm transition duration-300"
-            onClick={resetGrid}
-          >
-            Reiniciar Cuadrícula
-          </button>
-          <button
-            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg text-sm transition duration-300"
-            onClick={() => setShowExplanation(!showExplanation)}
-          >
-            {showExplanation ? 'Ocultar' : 'Mostrar'} Explicación
-          </button>
-        </div>
-        <div className="mt-4">
-          <h3 className="text-lg font-semibold mb-2">Explicación paso a paso:</h3>
-          <ol className="list-decimal list-inside space-y-1 text-sm">
-            {explanation.map((step, index) => (
-              <li key={index} className={index === frame ? "font-bold" : ""}>
-                {step}
-              </li>
-            ))}
-          </ol>
-        </div>
-        {showExplanation && <DetailedExplanation />}
+                min="0"
+                max="255"
+              />
+            )}
+            {isOutput && cell}
+          </div>
+        ))}
       </div>
-    );
+    ));
+  };
+
+  const renderKernel = (kernel, highlight = []) => (
+    <div style={{ display: 'inline-block', marginRight: '20px', verticalAlign: 'top' }}>
+      {kernel.map((row, i) => (
+        <div key={i} style={{ display: 'flex' }}>
+          {row.map((cell, j) => (
+            <div
+              key={j}
+              style={{
+                width: cellSize / 2,
+                height: cellSize / 2,
+                border: '1px solid #ccc',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: highlight.some(([hi, hj]) => hi === i && hj === j) ? 'yellow' : (cell === 0 ? '#f0f0f0' : cell > 0 ? '#ffcccc' : '#ccccff'),
+                fontSize: '12px',
+              }}
+            >
+              {cell}
+            </div>
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+
+  const renderAnimationStep = () => {
+    const { row, col } = selectedCell;
+    switch (animationStep) {
+      case 0:
+        return (
+          <div>
+            <h3>Paso 1: Imagen de entrada</h3>
+            {renderGrid(inputGrid, false, [[row, col]])}
+            <p>Comenzamos con la imagen de entrada. El píxel central (resaltado) es el que vamos a procesar.</p>
+          </div>
+        );
+      case 1:
+        return (
+          <div>
+            <h3>Paso 2: Kernel X</h3>
+            {renderKernel(schorrX)}
+            <p>Este es el kernel X que usaremos para detectar bordes verticales.</p>
+          </div>
+        );
+      case 2:
+        return (
+          <div>
+            <h3>Paso 3: Aplicación del Kernel X</h3>
+            {renderGrid(inputGrid, false, [[row-1, col-1], [row-1, col], [row-1, col+1], [row, col-1], [row, col], [row, col+1], [row+1, col-1], [row+1, col], [row+1, col+1]])}
+            {renderKernel(schorrX)}
+            <p>Aplicamos el kernel X a los 9 píxeles centrados en nuestro píxel de interés.</p>
+          </div>
+        );
+      case 3:
+        return (
+          <div>
+            <h3>Paso 4: Kernel Y</h3>
+            {renderKernel(schorrY)}
+            <p>Este es el kernel Y que usaremos para detectar bordes horizontales.</p>
+          </div>
+        );
+      case 4:
+        return (
+          <div>
+            <h3>Paso 5: Aplicación del Kernel Y</h3>
+            {renderGrid(inputGrid, false, [[row-1, col-1], [row-1, col], [row-1, col+1], [row, col-1], [row, col], [row, col+1], [row+1, col-1], [row+1, col], [row+1, col+1]])}
+            {renderKernel(schorrY)}
+            <p>Aplicamos el kernel Y a los mismos 9 píxeles.</p>
+          </div>
+        );
+      case 5:
+        return (
+          <div>
+            <h3>Paso 6: Cálculo de Gradientes</h3>
+            <p>Gx = {gx.toFixed(2)}</p>
+            <p>Gy = {gy.toFixed(2)}</p>
+            <p>G = √(Gx² + Gy²) = {g.toFixed(2)}</p>
+            <p>Calculamos los gradientes Gx y Gy, y luego el gradiente total G.</p>
+          </div>
+        );
+      case 6:
+        return (
+          <div>
+            <h3>Paso 7: Resultado Final</h3>
+            {renderGrid(outputGrid, true)}
+            <p>El resultado final muestra los bordes detectados. Los píxeles más brillantes indican bordes más fuertes.</p>
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
+
+  const containerStyle = {
+    fontFamily: 'Arial, sans-serif',
+    maxWidth: '1000px',
+    margin: '0 auto',
+    padding: '20px',
+    backgroundColor: '#f0f0f0',
+    borderRadius: '10px',
+    boxShadow: '0 0 10px rgba(0,0,0,0.1)',
+  };
+
+  const sectionStyle = {
+    backgroundColor: 'white',
+    padding: '20px',
+    marginBottom: '20px',
+    borderRadius: '5px',
+    boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
+  };
+
+  const buttonStyle = {
+    backgroundColor: '#4CAF50',
+    border: 'none',
+    color: 'white',
+    padding: '4px 9px',
+    textAlign: 'center',
+    textDecoration: 'none',
+    display: 'inline-block',
+    fontSize: '16px',
+    margin: '4px 2px',
+    cursor: 'pointer',
+    borderRadius: '5px',
+    transition: 'background-color 0.3s',
+  };
+
+  const controlButtonStyle = {
+    ...buttonStyle,
+    backgroundColor: '#2196F3',
+    padding: '5px 10px',
+    fontSize: '14px',
+  };
+
+  return (
+    <div style={containerStyle}>
+      <div style={sectionStyle}>
+        <h2>Imágenes de entrada y salida</h2>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <div>
+            <h3>Imagen de entrada</h3>
+            {renderGrid(inputGrid)}
+            <p>Haz clic en una celda para seleccionarla y modifica su valor para ver cómo afecta al resultado.</p>
+          </div>
+          <div>
+            <h3>Imagen de salida</h3>
+            {renderGrid(outputGrid, true)}
+          </div>
+        </div>
+      </div>
+      
+      <div style={sectionStyle}>
+        <h2>Resultados del cálculo</h2>
+        <p>Celda seleccionada: ({selectedCell.row}, {selectedCell.col})</p>
+        <p>Gradiente X (Gx): {gx.toFixed(2)}</p>
+        <p>Gradiente Y (Gy): {gy.toFixed(2)}</p>
+        <p>Gradiente total (G): {g.toFixed(2)}</p>
+      </div>
+      
+      <div style={sectionStyle}>
+        <h2>Animación del proceso</h2>
+        <div style={{ marginBottom: '10px' }}>
+          <button 
+            style={{...buttonStyle, backgroundColor: isAnimating ? '#f44336' : '#4CAF50'}} 
+            onClick={() => setIsAnimating(!isAnimating)}
+          >
+            {isAnimating ? 'Pausar' : 'Iniciar'} animación
+          </button>
+          <button 
+            style={controlButtonStyle} 
+            onClick={() => setAnimationStep((prevStep) => (prevStep - 1 + 7) % 7)}
+            disabled={isAnimating}
+          >
+            Anterior
+          </button>
+          <button 
+            style={controlButtonStyle} 
+            onClick={() => setAnimationStep((prevStep) => (prevStep + 1) % 7)}
+            disabled={isAnimating}
+          >
+            Siguiente
+          </button>
+        </div>
+        <div style={{ border: '1px solid #ccc', padding: '20px', marginTop: '10px', minHeight: '300px' }}>
+          {renderAnimationStep()}
+        </div>
+      </div>
+    </div>
+  );
 };
 
-export default CannyEdgeAnimatedExplanation;
+export default SchorrOperatorInteractiveFullControls;

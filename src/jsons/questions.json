@@ -1,6 +1,6 @@
 [
     {
-        "question": "¿Cuál es el propósito principal del Operador Laplaciano en el procesamiento de imágenes?",
+        "question": "¿Cuál es el propósito principal del Operador Scharr en el procesamiento de imágenes?",
         "options": [
             "Reducción de ruido",
             "Detección de bordes",
@@ -10,43 +10,43 @@
         "correctAnswer": 1
     },
     {
-        "question": "¿Qué tamaño suele tener el filtro utilizado en la implementación del Operador Laplaciano?",
+        "question": "¿Cómo se compara el Operador Scharr con el Operador Sobel en términos de precisión?",
         "options": [
-            "Filtro de 3x3",
-            "Filtro de 5x5",
-            "Filtro de 7x7",
-            "Filtro de 9x9"
+            "Scharr es menos preciso que Sobel",
+            "Scharr es más preciso que Sobel",
+            "Tienen la misma precisión",
+            "Scharr no es un operador de detección de bordes"
         ],
-        "correctAnswer": 0
+        "correctAnswer": 1
     },
     {
-        "question": "¿Qué calcula el Operador Laplaciano en cada punto de la imagen?",
+        "question": "¿Qué calcula el Operador Scharr en cada punto de la imagen?",
         "options": [
             "El valor promedio de los píxeles",
             "La desviación estándar de los píxeles",
-            "La segunda derivada de la intensidad",
+            "El gradiente de la intensidad con mayor precisión",
             "La transformada de Fourier"
         ],
         "correctAnswer": 2
     },
     {
-        "question": "¿Cuántas etapas principales tiene el algoritmo del Operador Laplaciano?",
+        "question": "¿En qué situación es especialmente útil el Operador Scharr?",
         "options": [
-            "1",
-            "2",
-            "3",
-            "4"
+            "Cuando se necesita mejorar el contraste",
+            "Cuando se requiere una detección de bordes muy precisa",
+            "Para reducir el tamaño de la imagen",
+            "Para mejorar la saturación de colores"
         ],
-        "correctAnswer": 0
+        "correctAnswer": 1
     },
     {
-        "question": "¿Cuál de las siguientes NO es una aplicación común del Operador Laplaciano?",
+        "question": "¿Cuál de las siguientes NO es una aplicación común del Operador Scharr?",
         "options": [
             "Detección de bordes",
             "Segmentación de imágenes médicas",
-            "Realce de detalles en imágenes",
-            "Compresión de imágenes sin pérdida"
+            "Compresión de imágenes sin pérdida",
+            "Análisis de texturas"
         ],
-        "correctAnswer": 3
+        "correctAnswer": 2
     }
 ]

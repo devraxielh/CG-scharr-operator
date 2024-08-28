@@ -3,11 +3,11 @@
     "imageSrc": "./assets/yo.png",
     "imageAlt": "Rodrigo Garcia",
     "name": "Rodrigo García, PhD",
-    "sectionTitle": "Objeto Virtual de Aprendizaje: Operador Laplaciano",
-    "description": "Este Objeto Virtual de Aprendizaje (OVA) está diseñado para proporcionar una comprensión integral del Operador Laplaciano, una técnica avanzada en el procesamiento de imágenes digitales y la visión por computadora.",
+    "sectionTitle": "Objeto Virtual de Aprendizaje: Operador Scharr",
+    "description": "Este Objeto Virtual de Aprendizaje (OVA) está diseñado para proporcionar una comprensión integral del Operador Scharr, una técnica avanzada en el procesamiento de imágenes digitales y la visión por computadora.",
     "structureTitle": "El OVA se estructura en cuatro secciones principales:",
     "structure": [
-        "Teoría: Explica los fundamentos matemáticos y conceptuales del Operador Laplaciano.",
+        "Teoría: Explica los fundamentos matemáticos y conceptuales del Operador Scharr.",
         "Animación: Proporciona una visualización interactiva del funcionamiento del operador.",
         "Evaluación: Permite a los usuarios poner a prueba sus conocimientos adquiridos.",
         "Acerca de: Ofrece información sobre el OVA y sus objetivos educativos."
@@ -16,6 +16,6 @@
     "learningOutcomesTitle": "Resultados de aprendizaje donde apunta",
     "learningOutcomes": [
         "Comprender los conceptos fundamentales de OpenCV y su aplicación en la manipulación de imágenes.",
-        "Aplicar técnicas de detección de bordes y contornos utilizando OpenCV, con énfasis en el Operador Laplaciano."
+        "Aplicar técnicas de detección de bordes y contornos utilizando OpenCV, con énfasis en el Operador Scharr."
     ]
 }
